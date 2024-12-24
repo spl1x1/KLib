@@ -2,7 +2,7 @@
 
 include_directories(KLib)
 link_directories(${CMAKE_SOURCE_DIR}/KLib)
-target_link_libraries(untitled1 PRIVATE ${CMAKE_SOURCE_DIR}/KLib/libKLib.a)
+target_link_libraries("YourFile" PRIVATE ${CMAKE_SOURCE_DIR}/KLib/libKLib.a)
 
 //manual
 

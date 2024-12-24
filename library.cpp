@@ -1,7 +1,7 @@
 
 #include "library.h"
-#include <iostream>
 #include <chrono>
+#include <iostream>
 using namespace std;
 
 //xcolor
@@ -21,7 +21,7 @@ string dye(const string& Text, const Color color) {
 }
 
 
-string dye_b(const string& Text, Color background) {
+string dye_b(const string& Text, const Color background) {
     string c;
     switch (background) {
         case black: c = "[40m"; break;
@@ -41,7 +41,16 @@ int cin_int() {
     while (true) {
         cin >> hodnota;
         try {return stoi(hodnota,nullptr,10);}
-        catch(...) {cout << dye("Neplatna hodnota",red) << endl;}
+        catch(...) {cout << "Neplatna hodnota" << endl;}
+    }
+}
+
+int cin_int(Color errorColor) {
+    string hodnota;
+    while (true) {
+        cin >> hodnota;
+        try {return stoi(hodnota,nullptr,10);}
+        catch(...) {cout << dye("Neplatna hodnota",errorColor) << endl;}
     }
 }
 
@@ -50,7 +59,16 @@ double cin_double() {
     while (true) {
         cin >> hodnota;
         try {return stod(hodnota,nullptr);}
-        catch(...) {cout << dye("Neplatna hodnota",red) << endl;}
+        catch(...) {cout << "Neplatna hodnota" << endl;}
+    }
+}
+
+double cin_double(Color errorColor) {
+    string hodnota;
+    while (true) {
+        cin >> hodnota;
+        try {return stod(hodnota,nullptr);}
+        catch(...) {cout << dye("Neplatna hodnota",errorColor) << endl;}
     }
 }
 
@@ -59,6 +77,7 @@ char cin_char() {
     cin >> hodnota;
     return hodnota[0];
 }
+
 
 //logger
 using namespace std;
@@ -78,4 +97,55 @@ logger::logger() {
     } catch (...) {
         cout << "Error opening file logger.log" << endl;
     }
+}
+
+
+void heap::increaseHeapArray() {
+    const auto newHeapArray = new int[capacity*2];
+    for (int i = 0; i < usedSize+1; i++) {
+        newHeapArray[i] = heapArray[i];
+    }
+    delete[] heapArray;
+        heapArray = newHeapArray;
+    capacity*=2;
+}
+
+void heap::insertElement(const int toInsert) {
+    heapArray[usedSize]=toInsert;
+    usedSize++;
+    if(usedSize==capacity) {
+        heap::increaseHeapArray();
+    }
+}
+
+int heap::getElement(const int index) const {
+    if(index>=0 && index<usedSize){
+        return heapArray[index];}
+    return NULL;
+}
+
+int heap::getSize() const {return usedSize;}
+
+int heap::getParent(const int index) const {
+    if(usedSize==0 || index <=0 || index>=usedSize) {
+        cout << "Element has no parent" << endl;
+        return -1;
+    }
+    return (index-1)/2;
+}
+
+int heap::getLeftChild(const int index) const {
+    if(usedSize==0 || index <0 || index>=usedSize) {
+        cout << "Element has no child" << endl;
+        return -1;
+    }
+    return 2*index+1;
+}
+
+int heap::getRightChild(const int index) const {
+    if(usedSize==0 || index <0 || index>=usedSize) {
+        cout << "Element has no child" << endl;
+        return -1;
+    }
+    return 2*index+2;
 }

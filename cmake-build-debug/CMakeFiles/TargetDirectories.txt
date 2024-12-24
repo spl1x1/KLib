@@ -1,4 +1,4 @@
-/Users/lukaskaplanek/Desktop/unob/programko/KLib/cmake-build-debug/CMakeFiles/KLib.dir
-/Users/lukaskaplanek/Desktop/unob/programko/KLib/cmake-build-debug/CMakeFiles/format.dir
-/Users/lukaskaplanek/Desktop/unob/programko/KLib/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/lukaskaplanek/Desktop/unob/programko/KLib/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/lukyk/CLionProjects/KLib/cmake-build-debug/CMakeFiles/KLib.dir
+C:/Users/lukyk/CLionProjects/KLib/cmake-build-debug/CMakeFiles/format.dir
+C:/Users/lukyk/CLionProjects/KLib/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/lukyk/CLionProjects/KLib/cmake-build-debug/CMakeFiles/rebuild_cache.dir
