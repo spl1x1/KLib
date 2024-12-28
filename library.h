@@ -5,13 +5,13 @@
 #include <fstream>
 using namespace std;
 
-
+//console output styling
 enum Color { black, red, green, yellow, blue, magenta, cyan, white };
+static string dye(const string& Text, Color color);
+static string dye_b(const string& Text, Color background);
 
-string dye(const string& Text, Color color);
 
-string dye_b(const string& Text, Color background);
-
+//data input with check
 int cin_int();
 int cin_int(Color errorColor);
 
@@ -20,6 +20,7 @@ double cin_double(Color errorColor);
 
 char cin_char();
 
+//file logger
 class logger {
     ofstream logfile;
 
@@ -29,36 +30,53 @@ public:
     int add(string toLog,bool logTime);
 };
 
+
+//datastructures
 class heap {
+    class heap_node {
+        int capacity = 10;
+        int usedSize = 0;
+        int *heapArray = new int[capacity];
+
+    protected:
+        void swap(int indexA, int indexB);
+        void increaseHeapArray();
+        void insertElement(int toInsert);
+
+    public:
+        [[nodiscard]] int getSize() const;
+        [[nodiscard]] int getElement(int index) const;
+        [[nodiscard]] int getParent (int index) const;
+        [[nodiscard]] int getLeftChild(int index) const;
+        [[nodiscard]] int getRightChild(int index) const;
+        ~heap_node();
+    };
+
+    public:
+    class min : public heap_node{
+        void restoreHeapOrder(int indexOfLatest);
+    public:
+        void insert(int toInsert);
+    };
+
+    class max : public heap_node {
+        void restoreHeapOrder(int indexOfLatest);
+    public:
+        void insert(int toInsert);
+    };
+};
+
+template <typename T>class queue {
     int capacity = 10;
     int usedSize = 0;
-    int *heapArray = new int[capacity];
-    void increaseHeapArray();
-    void insertElement(int toInsert);
-
-    public:
-    [[nodiscard]] int getSize() const;
-    [[nodiscard]] int getElement(int index) const;
-    [[nodiscard]] int getParent (int index) const;
-    [[nodiscard]] int getLeftChild(int index) const;
-    [[nodiscard]] int getRightChild(int index) const;
-};
-
-class minHeap : public heap {
-    void restoreHeapOrder();
-    public:
-    void insert(int toInsert);
-};
-
-class maxHeap : public heap {
-    void restoreHeapOrder();
-    public:
-    void insert(int toInsert);
-};
-
-class queue {
-
-    public:
+    T *queueArray = new T[capacity];
+    void increaseQueueArray();
+public:
+    ~queue();
+    void join(T toInsert);
+    void release();
+    int getSize();
+    T getElement(int index);\
 };
 
 #endif //KLIB_LIBRARY_H

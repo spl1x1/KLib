@@ -4,7 +4,6 @@
 #include <iostream>
 using namespace std;
 
-//xcolor
 string dye(const string& Text, const Color color) {
     string c;
     switch (color) {
@@ -100,7 +99,7 @@ logger::logger() {
 }
 
 
-void heap::increaseHeapArray() {
+void heap::heap_node::increaseHeapArray() {
     const auto newHeapArray = new int[capacity*2];
     for (int i = 0; i < usedSize+1; i++) {
         newHeapArray[i] = heapArray[i];
@@ -110,23 +109,23 @@ void heap::increaseHeapArray() {
     capacity*=2;
 }
 
-void heap::insertElement(const int toInsert) {
+void heap::heap_node::insertElement(const int toInsert) {
     heapArray[usedSize]=toInsert;
     usedSize++;
     if(usedSize==capacity) {
-        heap::increaseHeapArray();
+        increaseHeapArray();
     }
 }
 
-int heap::getElement(const int index) const {
+int heap::heap_node::getElement(const int index) const {
     if(index>=0 && index<usedSize){
         return heapArray[index];}
     return NULL;
 }
 
-int heap::getSize() const {return usedSize;}
+int heap::heap_node::getSize() const {return usedSize;}
 
-int heap::getParent(const int index) const {
+int heap::heap_node::getParent(const int index) const {
     if(usedSize==0 || index <=0 || index>=usedSize) {
         cout << "Element has no parent" << endl;
         return -1;
@@ -134,7 +133,7 @@ int heap::getParent(const int index) const {
     return (index-1)/2;
 }
 
-int heap::getLeftChild(const int index) const {
+int heap::heap_node::getLeftChild(const int index) const {
     if(usedSize==0 || index <0 || index>=usedSize) {
         cout << "Element has no child" << endl;
         return -1;
@@ -142,10 +141,101 @@ int heap::getLeftChild(const int index) const {
     return 2*index+1;
 }
 
-int heap::getRightChild(const int index) const {
+int heap::heap_node::getRightChild(const int index) const {
     if(usedSize==0 || index <0 || index>=usedSize) {
         cout << "Element has no child" << endl;
         return -1;
     }
     return 2*index+2;
 }
+
+void heap::heap_node::swap(int indexA, int indexB) {
+    if(indexA==indexB || indexA<0 || indexB<0 ||  indexA>=usedSize || indexB>=usedSize) {
+        return;
+    }
+    const int temp=heapArray[indexA];
+    heapArray[indexA]=heapArray[indexB];
+    heapArray[indexB]=temp;
+}
+
+
+void heap::max::restoreHeapOrder(int indexOfLatest) {
+    if(indexOfLatest==0){return;}
+    const int indexOfParent = getParent(indexOfLatest);
+    if (getElement(indexOfLatest)>getElement(indexOfParent)) {
+        swap(indexOfLatest,indexOfParent);
+        restoreHeapOrder(indexOfParent);
+    }
+}
+
+void heap::min::restoreHeapOrder(int indexOfLatest) {
+    if(indexOfLatest==0){return;}
+    const int indexOfParent = getParent(indexOfLatest);
+    if (getElement(indexOfLatest)<getElement(indexOfParent)) {
+        swap(indexOfLatest,indexOfParent);
+        restoreHeapOrder(indexOfParent);
+    }
+}
+
+void heap::max::insert(const int toInsert) {
+    insertElement(toInsert);
+    restoreHeapOrder(getSize()-1);
+}
+
+void heap::min::insert(const int toInsert) {
+    insertElement(toInsert);
+    restoreHeapOrder(getSize()-1);
+}
+
+heap::heap_node::~heap_node() {
+    delete[] heapArray;
+}
+
+template<typename T>
+void queue<T>::increaseQueueArray() {
+    const auto newQueueArray = new T[capacity*2];
+    for (int i = 0; i < usedSize+1; i++) {
+        newQueueArray[i] = queueArray[i];
+    }
+    delete[] queueArray;
+    queueArray = newQueueArray;
+    capacity*=2;
+}
+
+template<typename T>
+queue<T>::~queue() {
+    delete[] queueArray;
+}
+
+template<typename T>
+int queue<T>::getSize() {
+    return usedSize;
+}
+
+template<typename T>
+void queue<T>::release() {
+    if(usedSize==0){return;}
+    usedSize--;
+}
+
+template<typename T>
+void queue<T>::join(T toInsert) {
+    queueArray[usedSize]=toInsert;
+    usedSize++;
+    if(usedSize==capacity) {
+        increaseQueueArray();
+    }
+}
+
+template<typename T>
+T queue<T>::getElement(int index) {
+    if(index>=0 && index<usedSize) {
+        return queueArray[index];
+    }
+    return NULL;
+}
+
+
+
+
+
