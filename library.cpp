@@ -19,7 +19,6 @@ string dye(const string& Text, const Color color) {
     return "\x1b" +c+Text+ "\x1b[0m";
 }
 
-
 string dye_b(const string& Text, const Color background) {
     string c;
     switch (background) {
@@ -36,47 +35,26 @@ string dye_b(const string& Text, const Color background) {
 }
 
 int cin_int() {
-    string hodnota;
-    while (true) {
-        cin >> hodnota;
-        try {return stoi(hodnota,nullptr,10);}
-        catch(...) {cout << "Neplatna hodnota" << endl;}
-    }
-}
-
-int cin_int(Color errorColor) {
-    string hodnota;
-    while (true) {
-        cin >> hodnota;
-        try {return stoi(hodnota,nullptr,10);}
-        catch(...) {cout << dye("Neplatna hodnota",errorColor) << endl;}
-    }
+    string value;
+        cin >> value;
+        try {return stoi(value,nullptr,10);}
+        catch(...) {cerr << "Not a valid value" << endl;}
+        return NULL;
 }
 
 double cin_double() {
-    string hodnota;
-    while (true) {
-        cin >> hodnota;
-        try {return stod(hodnota,nullptr);}
-        catch(...) {cout << "Neplatna hodnota" << endl;}
-    }
-}
-
-double cin_double(Color errorColor) {
-    string hodnota;
-    while (true) {
-        cin >> hodnota;
-        try {return stod(hodnota,nullptr);}
-        catch(...) {cout << dye("Neplatna hodnota",errorColor) << endl;}
-    }
+    string value;
+    cin >> value;
+    try {return stod(value,nullptr);}
+    catch(...) {cerr << "Not a valid value" << endl;}
+    return NULL;
 }
 
 char cin_char() {
-    string hodnota;
-    cin >> hodnota;
-    return hodnota[0];
+    string value;
+    cin >> value;
+    return value[0];
 }
-
 
 //logger
 using namespace std;
@@ -86,7 +64,7 @@ logger::logger(string filename) {
     try {
         logfile.open(filename,ios::app);
     } catch (...) {
-        cout << "Error opening file " << filename << endl;
+        cerr << "Error opening file " << filename << endl;
     }
 }
 
@@ -94,13 +72,13 @@ logger::logger() {
     try {
         logfile.open("logger.log", ios::app);
     } catch (...) {
-        cout << "Error opening file logger.log" << endl;
+        cerr << "Error opening file logger.log" << endl;
     }
 }
 
-
-void heap::heap_node::increaseHeapArray() {
-    const auto newHeapArray = new int[capacity*2];
+template<typename T>
+void heap<T>::heap_node::increaseHeapArray() {
+    const auto newHeapArray = new T[capacity*2];
     for (int i = 0; i < usedSize+1; i++) {
         newHeapArray[i] = heapArray[i];
     }
@@ -109,7 +87,8 @@ void heap::heap_node::increaseHeapArray() {
     capacity*=2;
 }
 
-void heap::heap_node::insertElement(const int toInsert) {
+template<typename T>
+void heap<T>::heap_node::insertElement(const T toInsert) {
     heapArray[usedSize]=toInsert;
     usedSize++;
     if(usedSize==capacity) {
@@ -117,82 +96,160 @@ void heap::heap_node::insertElement(const int toInsert) {
     }
 }
 
-int heap::heap_node::getElement(const int index) const {
+template<typename T>
+T heap<T>::heap_node::getElement(const int index) const {
     if(index>=0 && index<usedSize){
         return heapArray[index];}
     return NULL;
 }
 
-int heap::heap_node::getSize() const {return usedSize;}
+template<typename T>
+int heap<T>::heap_node::getSize() const {return usedSize;}
 
-int heap::heap_node::getParent(const int index) const {
+template<typename T>
+int heap<T>::heap_node::getParent(const int index) const {
     if(usedSize==0 || index <=0 || index>=usedSize) {
-        cout << "Element has no parent" << endl;
+        cerr << "Element has no parent" << endl;
         return -1;
     }
     return (index-1)/2;
 }
 
-int heap::heap_node::getLeftChild(const int index) const {
+template<typename T>
+int heap<T>::heap_node::getLeftChild(const int index) const {
     if(usedSize==0 || index <0 || index>=usedSize) {
-        cout << "Element has no child" << endl;
+        cerr << "Element has no child" << endl;
         return -1;
     }
     return 2*index+1;
 }
 
-int heap::heap_node::getRightChild(const int index) const {
+template<typename T>
+int heap<T>::heap_node::getRightChild(const int index) const {
     if(usedSize==0 || index <0 || index>=usedSize) {
-        cout << "Element has no child" << endl;
+        cerr << "Element has no child" << endl;
         return -1;
     }
     return 2*index+2;
 }
 
-void heap::heap_node::swap(int indexA, int indexB) {
+template<typename T>
+void heap<T>::heap_node::swap(const int indexA, const int indexB) const {
     if(indexA==indexB || indexA<0 || indexB<0 ||  indexA>=usedSize || indexB>=usedSize) {
         return;
     }
-    const int temp=heapArray[indexA];
+    const T temp=heapArray[indexA];
     heapArray[indexA]=heapArray[indexB];
     heapArray[indexB]=temp;
 }
 
-
-void heap::max::restoreHeapOrder(int indexOfLatest) {
+template<typename T>
+void heap<T>::max::restoreHeapOrder(int indexOfLatest) {
     if(indexOfLatest==0){return;}
-    const int indexOfParent = getParent(indexOfLatest);
-    if (getElement(indexOfLatest)>getElement(indexOfParent)) {
-        swap(indexOfLatest,indexOfParent);
+    const int indexOfParent = this->getParent(indexOfLatest);
+    const T currentValue = this->getElement(indexOfLatest);
+    const T valueOfParent = this->getElement(indexOfParent);
+    if (currentValue>valueOfParent) {
+        this->swap(indexOfLatest,indexOfParent);
         restoreHeapOrder(indexOfParent);
     }
 }
 
-void heap::min::restoreHeapOrder(int indexOfLatest) {
+template<typename T>
+void heap<T>::min::restoreHeapOrder(int indexOfLatest) {
     if(indexOfLatest==0){return;}
-    const int indexOfParent = getParent(indexOfLatest);
-    if (getElement(indexOfLatest)<getElement(indexOfParent)) {
-        swap(indexOfLatest,indexOfParent);
+    const int indexOfParent = this->getParent(indexOfLatest);
+    const T currentValue = this->getElement(indexOfLatest);
+    const T valueOfParent = this->getElement(indexOfParent);
+    if (currentValue<valueOfParent) {
+        this->swap(indexOfLatest,indexOfParent);
         restoreHeapOrder(indexOfParent);
     }
 }
 
-void heap::max::insert(const int toInsert) {
-    insertElement(toInsert);
-    restoreHeapOrder(getSize()-1);
+template<typename T>
+void heap<T>::max::insert(const T toInsert) {
+    this->insertElement(toInsert);
+    restoreHeapOrder(this->getSize()-1);
 }
 
-void heap::min::insert(const int toInsert) {
-    insertElement(toInsert);
-    restoreHeapOrder(getSize()-1);
+template<typename T>
+void heap<T>::min::insert(const T toInsert) {
+    this->insertElement(toInsert);
+    restoreHeapOrder(this->getSize()-1);
 }
 
-heap::heap_node::~heap_node() {
+template<typename T>
+heap<T>::heap_node::~heap_node() {
     delete[] heapArray;
 }
 
 template<typename T>
-void queue<T>::increaseQueueArray() {
+void heap<T>::heap_node::deleteElement(int index) {
+        heapArray[index]=heapArray[usedSize-1];
+        usedSize--;
+}
+
+template<typename T>
+void heap<T>::max::heapify(const int index) {
+    int greaterChild = this->getLeftChild(index);
+    const int indexOfRightChild = this->getRightChild(index);
+    T valueOfGreaterChild = this->getElement(greaterChild);
+    const T rightChildValue = this->getElement(indexOfRightChild);
+
+
+    if (rightChildValue>valueOfGreaterChild) {
+        valueOfGreaterChild = rightChildValue;
+        greaterChild = indexOfRightChild;
+    }
+    if (valueOfGreaterChild>this->getElement(index)){
+        this->swap(index,greaterChild);
+        heapify(greaterChild);
+    }
+}
+
+template<typename T>
+void heap<T>::min::heapify(const int index) {
+    int lesserChild = this->getLeftChild(index);
+    const int indexOfRightChild = this->getRightChild(index);
+    T valueOfLesserChild = this->getElement(lesserChild);
+    const T rightChildValue = this->getElement(indexOfRightChild);
+
+
+    if (rightChildValue<valueOfLesserChild) {
+        valueOfLesserChild = rightChildValue;
+        lesserChild = indexOfRightChild;
+    }
+    if (valueOfLesserChild<this->getElement(index)){
+        this->swap(index,lesserChild);
+        heapify(lesserChild);
+    }
+}
+
+template<typename T>
+void heap<T>::max::remove(const int toRemoveIndex) {
+    const int indexOfLast = this->getSize()-1;
+    if(toRemoveIndex<0 || toRemoveIndex>=indexOfLast) {
+        cerr << "Index out of bounds" << endl;
+        return;
+    }
+    this->deleteElement(toRemoveIndex);
+    heapify(toRemoveIndex);
+}
+
+template<typename T>
+void heap<T>::min::remove(const int toRemoveIndex) {
+    const int indexOfLast = this->getSize()-1;
+    if(toRemoveIndex<0 || toRemoveIndex>=indexOfLast) {
+        cerr << "Index out of bounds" << endl;
+        return;
+    }
+    this->deleteElement(toRemoveIndex);
+    heapify(toRemoveIndex);
+}
+
+template<typename T>
+void queue_s<T>::increaseQueueArray() {
     const auto newQueueArray = new T[capacity*2];
     for (int i = 0; i < usedSize+1; i++) {
         newQueueArray[i] = queueArray[i];
@@ -203,39 +260,50 @@ void queue<T>::increaseQueueArray() {
 }
 
 template<typename T>
-queue<T>::~queue() {
+void queue_s<T>::removeOffset() {
+    for (int i = offset; i < usedSize; i++) {
+        queueArray[i-offset] = queueArray[i];
+    }
+    usedSize-=offset;
+    offset=0;
+}
+
+
+template<typename T>
+queue_s<T>::~queue_s() {
     delete[] queueArray;
 }
 
 template<typename T>
-int queue<T>::getSize() {
-    return usedSize;
+int queue_s<T>::getSize() const {
+    return usedSize-offset;
 }
 
 template<typename T>
-void queue<T>::release() {
+void queue_s<T>::release() {
     if(usedSize==0){return;}
-    usedSize--;
+    offset++;
 }
 
 template<typename T>
-void queue<T>::join(T toInsert) {
+void queue_s<T>::join(T toInsert) {
     queueArray[usedSize]=toInsert;
     usedSize++;
-    if(usedSize==capacity) {
-        increaseQueueArray();
+    if(usedSize!=capacity) {
+        return;
     }
+    if (offset!=0) {
+        removeOffset();
+        return;
+    }
+    increaseQueueArray();
 }
 
 template<typename T>
-T queue<T>::getElement(int index) {
-    if(index>=0 && index<usedSize) {
-        return queueArray[index];
+T queue_s<T>::getElement(const int index) {
+    if(index>=0 && index<getSize()) {
+        return queueArray[index+offset];
     }
+    cerr << "Index out of bound" << endl;
     return NULL;
 }
-
-
-
-
-

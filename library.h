@@ -13,10 +13,8 @@ static string dye_b(const string& Text, Color background);
 
 //data input with check
 int cin_int();
-int cin_int(Color errorColor);
 
 double cin_double();
-double cin_double(Color errorColor);
 
 char cin_char();
 
@@ -32,20 +30,19 @@ public:
 
 
 //datastructures
-class heap {
+template <typename T>class heap {
     class heap_node {
         int capacity = 10;
         int usedSize = 0;
-        int *heapArray = new int[capacity];
-
+        T *heapArray = new T[capacity];
     protected:
-        void swap(int indexA, int indexB);
+        void swap(int indexA, int indexB) const;
         void increaseHeapArray();
-        void insertElement(int toInsert);
-
+        void insertElement(T toInsert);
+        void deleteElement(int index);
     public:
         [[nodiscard]] int getSize() const;
-        [[nodiscard]] int getElement(int index) const;
+        [[nodiscard]] T getElement(int index) const;
         [[nodiscard]] int getParent (int index) const;
         [[nodiscard]] int getLeftChild(int index) const;
         [[nodiscard]] int getRightChild(int index) const;
@@ -53,29 +50,35 @@ class heap {
     };
 
     public:
-    class min : public heap_node{
+    class min : public heap_node {
         void restoreHeapOrder(int indexOfLatest);
+        void heapify(int index);
     public:
-        void insert(int toInsert);
+        void insert(T toInsert);
+        void remove(int toRemoveIndex);
     };
 
     class max : public heap_node {
         void restoreHeapOrder(int indexOfLatest);
+        void heapify(int index);
     public:
-        void insert(int toInsert);
+        void insert(T toInsert);
+        void remove(int toRemoveIndex);
     };
 };
 
-template <typename T>class queue {
+template <typename T>class queue_s {
     int capacity = 10;
     int usedSize = 0;
+    int offset = 0;
     T *queueArray = new T[capacity];
     void increaseQueueArray();
+    void removeOffset();
 public:
-    ~queue();
+    ~queue_s();
     void join(T toInsert);
     void release();
-    int getSize();
+    [[nodiscard]] int getSize() const;
     T getElement(int index);\
 };
 
