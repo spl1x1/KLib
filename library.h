@@ -25,7 +25,7 @@ class logger {
 public:
     logger();
     explicit logger(string filename);
-    int add(string toLog,bool logTime);
+    void add(const string& toLog,bool logTime);
 };
 
 

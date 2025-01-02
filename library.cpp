@@ -1,7 +1,9 @@
 
 #include "library.h"
+
 #include <chrono>
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 string dye(const string& Text, const Color color) {
@@ -36,18 +38,24 @@ string dye_b(const string& Text, const Color background) {
 
 int cin_int() {
     string value;
+    while (true) {
         cin >> value;
-        try {return stoi(value,nullptr,10);}
-        catch(...) {cerr << "Not a valid value" << endl;}
-        return NULL;
+        try {return stoi(value,nullptr,10); }
+        catch(...) {
+            cerr << "Not a valid value" << endl;
+        }
+    }
 }
 
 double cin_double() {
     string value;
-    cin >> value;
-    try {return stod(value,nullptr);}
-    catch(...) {cerr << "Not a valid value" << endl;}
-    return NULL;
+    while (true) {
+        cin >> value;
+        try {return stod(value,nullptr); }
+        catch(...) {
+            cerr << "Not a valid value" << endl;
+        }
+    }
 }
 
 char cin_char() {
@@ -76,6 +84,16 @@ logger::logger() {
     }
 }
 
+void logger::add(const string& toLog, const bool logTime) {
+    const time_t currentTime{time(nullptr)};
+    const string date = ctime(&currentTime);
+    if (logTime) {
+        logfile << date << toLog << endl;
+        return;
+    }
+        logfile << toLog << endl;
+}
+
 template<typename T>
 void heap<T>::heap_node::increaseHeapArray() {
     const auto newHeapArray = new T[capacity*2];
@@ -100,7 +118,7 @@ template<typename T>
 T heap<T>::heap_node::getElement(const int index) const {
     if(index>=0 && index<usedSize){
         return heapArray[index];}
-    return NULL;
+    return NAN;
 }
 
 template<typename T>
@@ -305,5 +323,5 @@ T queue_s<T>::getElement(const int index) {
         return queueArray[index+offset];
     }
     cerr << "Index out of bound" << endl;
-    return NULL;
+    return NAN;
 }
