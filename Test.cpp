@@ -55,5 +55,7 @@ int main() {
     for (int i = 0; i < hm.getSize(); i++) {
         cout << hm.getElement(i) << endl;
     }
+    logger logger;
+    logger.add("test",true);
     return 0;
 }
