@@ -1,4 +1,0 @@
-C:/Users/lukyk/CLionProjects/KLib/cmake-build-debug/CMakeFiles/KLib.dir
-C:/Users/lukyk/CLionProjects/KLib/cmake-build-debug/CMakeFiles/format.dir
-C:/Users/lukyk/CLionProjects/KLib/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/lukyk/CLionProjects/KLib/cmake-build-debug/CMakeFiles/rebuild_cache.dir

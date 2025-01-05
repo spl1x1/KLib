@@ -4,7 +4,7 @@
 
 
 #include <iostream>
-#include "library.cpp"
+#include "library.h"
 
 int main() {
     cout <<"Queue:"<<endl;

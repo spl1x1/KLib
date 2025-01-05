@@ -3,7 +3,5 @@ project(KLib)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_library(KLib STATIC library.cpp
-        install.cpp
-        Test.cpp)
-add_executable(format install.cpp)
+add_executable(LibFormat LibFormat.cpp)
+add_executable(LibTest LibTest.cpp)

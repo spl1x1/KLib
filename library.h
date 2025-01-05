@@ -82,4 +82,5 @@ public:
     T getElement(int index);\
 };
 
+#include "library.cpp"
 #endif //KLIB_LIBRARY_H
