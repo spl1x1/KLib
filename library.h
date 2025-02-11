@@ -7,8 +7,8 @@ using namespace std;
 
 //console output styling
 enum Color { black, red, green, yellow, blue, magenta, cyan, white };
-static string dye(const string& Text, Color color);
-static string dye_b(const string& Text, Color background);
+string dye(const string& Text, Color color);
+string dye_b(const string& Text, Color background);
 
 
 //data input with check
@@ -82,5 +82,4 @@ public:
     T getElement(int index);\
 };
 
-#include "library.cpp"
 #endif //KLIB_LIBRARY_H
