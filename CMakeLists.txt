@@ -3,6 +3,6 @@ project(KLib)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(LibTest LibTest.cpp)
+add_executable(LibTest LibTest.cpp Library.cpp Library.h)
 
 add_library(KLib STATIC Library.cpp Library.h)
